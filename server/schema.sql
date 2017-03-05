@@ -3,23 +3,23 @@ CREATE DATABASE chat;
 USE chat;
 
 CREATE TABLE users (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(20) NOT NULL UNIQUE
 );
 
 CREATE TABLE rooms (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(20) NOT NULL UNIQUE
 );
 
 CREATE TABLE messages (
   /* Describe your table here.*/
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   content TEXT NOT NULL, 
-  user INTEGER,
-  room INTEGER,
-  FOREIGN KEY(user) REFERENCES users(id),
-  FOREIGN KEY(room) REFERENCES rooms(id)
+  userid INTEGER,
+  roomid INTEGER,
+  FOREIGN KEY(userid) REFERENCES users(id),
+  FOREIGN KEY(roomid) REFERENCES rooms(id)
 );
 
 /* Create other tables and define schemas for them here! */
