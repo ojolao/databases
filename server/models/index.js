@@ -9,11 +9,11 @@ module.exports = {
         if (err) {
           console.log(err);
         } else {
+          console.log('rows', rows);
           //needs to read from the database: messages (use query to get username, content, roomname)
           //push each object into results array of response object
           for (var i = 0; i < rows.length; i++) {
             returnObj.results.push(rows[i]);
-            console.log('rows', rows);
           }
         }
       });
@@ -23,6 +23,13 @@ module.exports = {
     post: function (data) {
       var roomname = data.roomname || 'lobby';
       db.query('INSERT INTO rooms SET name = ?', [roomname], function(err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(results);
+        }
+      });
+      db.query('INSERT INTO users SET name = ?', [data.username], function(err, results) {
         if (err) {
           console.log(err);
         } else {

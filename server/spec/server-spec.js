@@ -40,7 +40,7 @@ describe('Persistent Node Chat Server', function() {
         uri: 'http://127.0.0.1:3000/classes/messages',
         json: {
           username: 'Valjean',
-          message: 'In mercy\'s name, three days is all I need.',
+          text: 'In mercy\'s name, three days is all I need.',
           roomname: 'Hello'
         }
       }, function () {
@@ -53,23 +53,26 @@ describe('Persistent Node Chat Server', function() {
         var queryArgs = [];
 
         dbConnection.query(queryString, queryArgs, function(err, results) {
-          console.log('RESULTS', results);
+          console.log(JSON.parse(results));
+          results = JSON.parse(results);
           // Should have one result:
           expect(results.length).to.equal(1);
 
           // TODO: If you don't have a column named text, change this test.
-          expect(results[0].content).to.equal('In mercy\'s name, three days is all I need.');
+          expect(results[0].text).to.equal('In mercy\'s name, three days is all I need.');
 
-          done();
+        done();
         });
       });
+      
     });
   });
 
   it('Should output all messages from the DB', function(done) {
+
     // Let's insert a message into the db
-    var queryString = "";
-    var queryArgs = [];
+    var queryString = 'insert into messages set content = ?, userid = ?, roomid = (SELECT id from ROOMS where name = ?)';
+    var queryArgs = ['Men like you can never change!', 1, 'main'];
     // TODO - The exact query string and query args to use
     // here depend on the schema you design, so I'll leave
     // them up to you. */
@@ -82,9 +85,10 @@ describe('Persistent Node Chat Server', function() {
       request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
         var messageLog = JSON.parse(body);
         expect(messageLog[0].text).to.equal('Men like you can never change!');
-        expect(messageLog[0].roomname).to.equal('main');
-        done();
+        expect(messageLog[0].roomid).to.equal(1);
       });
+      
     });
+    done();
   });
 });
