@@ -25,13 +25,10 @@ module.exports = {
       }
     }, // a function which handles a get request for all messages
     post: function (request, res) {
-
       console.log('REQUEST.BODY FOR POST', request.body);
       statusCode = 201;
       models.messages.post(request.body);
-      var arr = [];
-      arr.push(request.body);
-      sendResponse(res, arr, statusCode);
+      sendResponse(res, request.body, statusCode);
     }, // a function which handles posting a message to the database
     options: function (request, res) {
       statusCode = 200;
@@ -52,11 +49,8 @@ module.exports = {
       statusCode = 201;
       request.on('data', function(data) {
         statusCode = 201;
-
         models.users.post(request.body);
-        var arr = [];
-        arr.push(request.body);
-        sendResponse(res, arr, statusCode);
+        sendResponse(res, request.body, statusCode);
       });
     },  
     options: function (request, res) {
